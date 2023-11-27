@@ -15,6 +15,9 @@ def parse_args():
     parser.add_argument('--random_seed', type=int, default=43)
     parser.add_argument('--use_wandb', default=True, action='store_true')
 
+    parser.add_argument('--min_estimated_clusters', type=int, default=70)
+    parser.add_argument('--max_estimated_clusters', type=int, default=200)
+
     parser.add_argument('--clustering_algorithm', type=str, default='kmeans-ft', help='Supported algorithms: [dbscan, dbscan-ft, kmeans, kmeans-ft]')
     
     # DBScan parameters
@@ -66,6 +69,6 @@ if __name__ == "__main__":
         image_labels, clusters_labels = train_kmeans(args.use_wandb, dataset, args.k)
         export_clusters(args, image_labels, clusters_labels)
     elif clustering_algorithm == 'kmeans-ft':
-        train_kmeans_finetune(args.use_wandb, dataset)
+        train_kmeans_finetune(args.use_wandb, dataset, args.min_estimated_clusters, args.max_estimated_clusters)
     else:
         raise NotImplementedError

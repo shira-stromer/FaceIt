@@ -30,10 +30,10 @@ def train_kmeans(use_wandb:bool, dataset:EmbeddingFacesDataSet, k):
     print(score)
     return image_labels, labels
 
-def train_kmeans_finetune(use_wandb:bool, dataset:EmbeddingFacesDataSet):
+def train_kmeans_finetune(use_wandb:bool, dataset:EmbeddingFacesDataSet, min_estimated_clusters, max_estimated_clusters):
     images, _ = dataset.get_all()
 
-    range_n_clusters = range(2, 150) 
+    range_n_clusters = range(min_estimated_clusters, max_estimated_clusters + 1) 
     numpy_array = images.numpy()
 
     # Elbow Method
