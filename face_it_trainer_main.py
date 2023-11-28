@@ -14,29 +14,33 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Face-It trainer')
     parser.add_argument('--random_seed', type=int, default=43)
     parser.add_argument('--use_wandb', default=True, action='store_true')
+    parser.add_argument('--wandb_project', type=str)
+    parser.add_argument('--wandb_entity', type=str)
+
+    # Use PT generated after running the data preparation script
+    parser.add_argument('--faces_embeddings_pt', type=str, default='face_embedding.pt')
 
     parser.add_argument('--min_estimated_clusters', type=int, default=70)
     parser.add_argument('--max_estimated_clusters', type=int, default=200)
 
-    parser.add_argument('--clustering_algorithm', type=str, default='kmeans-ft', help='Supported algorithms: [dbscan, dbscan-ft, kmeans, kmeans-ft]')
+    parser.add_argument('--clustering_algorithm', type=str, default='kmeans', help='Supported algorithms: [dbscan, dbscan-ft, kmeans, kmeans-ft]')
     
     # DBScan parameters
-    parser.add_argument('--min_cluster_samples', type=int, default=5)
+    parser.add_argument('--min_cluster_samples', type=int, default=10)
     parser.add_argument('--dbscan_eps', type=float, default=0.7)
 
     #KMeans parameters
-    parser.add_argument('--k', type=int, default=122)
-    parser.add_argument('--kmeans_init_method', type=str, default='random', help='Supported values: [kmeans++, random]')
+    parser.add_argument('--k', type=int, default=143)
 
-    parser.add_argument('--clusters_output_dir', type=str, default=None) #'faces-labels'
+    parser.add_argument('--clusters_output_dir', type=str, default='faces-labels') 
 
     return parser.parse_args()
 
 def init_wandb(args):
     if args.use_wandb:
         wandb.init(
-            project="FaceIt",
-            entity='bronershira',
+            project=args.wandb_project,
+            entity=args.wandb_entity,
             config=args)
         
 def export_clusters(args, images_labels, cluster_labels):
@@ -56,13 +60,13 @@ if __name__ == "__main__":
     print(args)
     init_wandb(args)
     np.random.seed(args.random_seed)
-    dataset = EmbeddingFacesDataSet()
+    dataset = EmbeddingFacesDataSet(args.faces_embeddings_pt)
     print(len(dataset))
 
     clustering_algorithm = args.clustering_algorithm
     if clustering_algorithm == 'dbscan':
         image_labels, clusters_labels = train_dbscan(args.use_wandb, dataset, args.dbscan_eps, args.min_cluster_samples)
-        export_clusters(image_labels, clusters_labels)
+        export_clusters(args, image_labels, clusters_labels)
     elif clustering_algorithm == 'dbscan-ft':
         train_dbscan_finetune(args.use_wandb, dataset)
     elif clustering_algorithm == 'kmeans':

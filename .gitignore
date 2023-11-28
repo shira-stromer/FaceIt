@@ -2,3 +2,5 @@ faces/
 faces-labels/
 .DS_Store
 wandb/
+faces_new/
+data_cleaning.csv

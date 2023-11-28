@@ -11,14 +11,11 @@ import tqdm
 #TODO: More parameters to fine tune
 
 def train_kmeans(use_wandb:bool, dataset:EmbeddingFacesDataSet, k):
-    # Assuming images is an array of your face embeddings
     images, image_labels = dataset.get_all()
 
-    # Clustering with KMeans
     kmeans = KMeans(n_clusters=k, n_init=10)  
     kmeans.fit(images.numpy())
 
-    # Cluster labels
     labels = kmeans.labels_
     for i, label in enumerate(labels):
         if label == -1:
@@ -36,7 +33,6 @@ def train_kmeans_finetune(use_wandb:bool, dataset:EmbeddingFacesDataSet, min_est
     range_n_clusters = range(min_estimated_clusters, max_estimated_clusters + 1) 
     numpy_array = images.numpy()
 
-    # Elbow Method
     wcss = []
     for k in tqdm.tqdm(range_n_clusters, desc='Processing', total=len(range_n_clusters)) :
         kmeans = KMeans(n_clusters=k, n_init=10)
@@ -51,7 +47,7 @@ def train_kmeans_finetune(use_wandb:bool, dataset:EmbeddingFacesDataSet, min_est
         dd = \
         {
             'algorithm': 'kmeans', 'k': k, 'min_samples':lables_counter.most_common()[::-1][0][1], 'clusters_num': clusters_num, 
-            'noisy_samples': -1, #'clusters_counters': Counter(labels),
+            'noisy_samples': -1, 
             'wcs': kmeans.inertia_, 'silhouette_score': score
         }
         wandb.log(dd) if use_wandb else print(dd)

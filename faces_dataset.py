@@ -1,14 +1,14 @@
-import os
 from torch.utils.data import Dataset
 import torch
 from torch.utils.data import DataLoader
 import cv2
 
-#TODO: organize images to faces and then remove blurry if needed by arg 
-#TODO: roate a face by its landmakrs
+
 class EmbeddingFacesDataSet(Dataset):
-    def __init__(self):
-        self.embedding_dict = torch.load('face_embedding.pt')
+    def __init__(self, faces_embeddings_pt='face_embedding.pt'):
+        print(f'Loading faces embeddings pt from file {faces_embeddings_pt}')
+        self.embedding_dict = torch.load(faces_embeddings_pt)
+        
         self.x = self.embedding_dict['x']
         self.y = self.embedding_dict['y']
 
