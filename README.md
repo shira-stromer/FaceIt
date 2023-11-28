@@ -1,5 +1,3 @@
-# Unsupervised Facial Clustering in Image Data
-
 <h1 align="center">
   FaceIt 😊
 </h1>
