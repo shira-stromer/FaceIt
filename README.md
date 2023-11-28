@@ -60,8 +60,8 @@ Usage:
 #### Clustering Algorithms
 Face-It supports multiple clustering algorithms:
 
-DBSCAN and DBSCAN Finetune (dbscan, dbscan-ft)
-KMeans and KMeans Finetune (kmeans, kmeans-ft)
+- DBSCAN and DBSCAN Finetune (dbscan, dbscan-ft)
+- KMeans and KMeans Finetune (kmeans, kmeans-ft)
 
 Specify the algorithm using the --clustering_algorithm argument.
 
