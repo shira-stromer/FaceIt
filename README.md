@@ -72,9 +72,6 @@ The clustered faces are exported to the specified output directory, organized by
 
 This project is licensed under the MIT License
 
-## Wandb Graphs
-![image](https://github.com/shirabroner/FaceIt/assets/33096214/5c90437e-b8d8-411b-a1c0-c0956fa805af)
-
 
 
 
